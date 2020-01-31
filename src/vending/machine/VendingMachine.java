@@ -15,108 +15,10 @@ public class VendingMachine {
 
     static Scanner input = new Scanner(System.in);
     static String method = "";
-
-    private static boolean CheckInput(String methodInput) {
-        boolean valid = false;
-        String value = methodInput;
-        String[] valueInputs = value.split(" ");
-
-        // check command number
-        String method1 = valueInputs[0];
-        for (int i = 1; i <= 5; i++) {
-            if (method1.equalsIgnoreCase(String.valueOf(i))) {
-                valid = true;
-            } else {
-                valid = false;
-            }
-        }
-        if (valid = false) {
-            System.out.println("Wrong command number input");
-        }
-
-        // check argument
-        if (valueInputs.length > 1) {
-            String method2 = valueInputs[1];
-            if (method1.equalsIgnoreCase("1")) {
-                if (method2.equalsIgnoreCase("10")
-                        || method2.equalsIgnoreCase("50")
-                        || method2.equalsIgnoreCase("100")
-                        || method2.equalsIgnoreCase("500")) {
-                    valid = true;
-                } else {
-                    System.out.println("Wrong arguments input");
-                    valid = false;
-                }
-            } else if (method1.equalsIgnoreCase("2")) {
-                if (method2.equalsIgnoreCase("1")
-                        || method2.equalsIgnoreCase("2")
-                        || method2.equalsIgnoreCase("3")) {
-                    valid = true;
-                } else {
-                    System.out.println("Wrong arguments input");
-                    valid = false;
-                }
-            }
-
-        }
-        return valid;
-    }
-
-    private static void CaseOne(String method1, String method2) {
-        String returnGate = "empty";
-        String status1 = " ";
-        String status2 = " ";
-        String status3 = " ";
-
-        System.out.println("----------------------------------");
-        System.out.printf("[Input amount]		%s JPY\n", method2);
-        System.out.println("[Change]                100 JPY     No change\n"
-                + "                        10 JPY      Change");
-        System.out.printf("[Return gate]           %s\n", returnGate);
-        System.out.printf("[Items for sale]        1. Canned coffee         120 JPY     %s\n", status1);
-        System.out.printf("                        2. Water PET bottle      100 JPY     %s\n", status2);
-        System.out.printf("                        3. Sport drinks          150 JPY     %s\n", status3);
-        System.out.println("[Outlet]                Canned coffee\n"
-                + "                        Canned coffee\n"
-                + "                        Water PET bottle");
-        System.out.println("----------------------------------");
-    }
-
-    private static String SplitValue(String methodInput) {
-
-        String value = methodInput;
-        String method1, method2 = null;
-        // check method input
-        if (CheckInput(method) != true) {
-            System.out.println("OK\n");
-        } else {
-            String[] valueInputs = value.split(" ");
-            method1 = valueInputs[0];
-            if (valueInputs.length > 1) {
-                method2 = valueInputs[1];
-            }
-            switch (method1) {
-                case "1":
-                    CaseOne(method1, method2);
-                    break;
-                case "2":
-                    break;
-                case "3":
-                    break;
-                case "4":
-                    break;
-                case "5":
-                    break;
-                default:
-                    System.out.println("OK");
-            }
-        }
-        return value;
-    }
+    static int coins10 = 9;
+    static int coins100 = 4;
 
     public static void main(String[] args) {
-
-        boolean loop = true;
 
         // Introduction input method
         System.out.println("Command (1)\n"
@@ -149,7 +51,18 @@ public class VendingMachine {
                 + "	Argument         : None\n"
                 + "For example: “5” (Get returned coins)\n");
 
-        do {
+        System.out.println("----------------------------------");
+        System.out.println("[Input amount]		0 JPY\n");
+        System.out.println("[Change]                100 JPY     No change");
+        System.out.println("                        10 JPY      Change");
+        System.out.println("[Return gate]           empty");
+        System.out.println("[Items for sale]        1. Canned coffee         120 JPY     ");
+        System.out.println("                        2. Water PET bottle      100 JPY     Sold out");
+        System.out.println("                        3. Sport drinks          150 JPY     ");
+        System.out.println("[Outlet]                empty");
+        System.out.println("----------------------------------");
+
+        while (true) {
             System.out.println("Input Method");
             System.out.println("Input [command number + space + arguments] into prompt");
             System.out.print("Your input: ");
@@ -158,8 +71,151 @@ public class VendingMachine {
             // split method input value from user
             SplitValue(method);
 
-        } while (loop = true);
-
+        }
     }
 
+    private static String SplitValue(String methodInput) {
+
+        String value = methodInput;
+        String method1, method2 = null;
+        // check method input
+        if (CheckInput(method) != true) {
+            System.out.println("OK\n");
+        } else {
+            String[] valueInputs = value.split(" ");
+            method1 = valueInputs[0];
+            if (valueInputs.length > 1) {
+                method2 = valueInputs[1];
+            }
+            switch (method1) {
+                case "1":
+                    CaseOne(method2);
+                    break;
+                case "2":
+                    break;
+                case "3":
+                    break;
+                case "4":
+                    break;
+                case "5":
+                    break;
+                default:
+                    System.out.println("OK");
+            }
+        }
+        return value;
+    }
+
+    private static boolean CheckInput(String methodInput) {
+        boolean valid = false;
+        String value = methodInput;
+        String[] valueInputs = value.split(" ");
+
+        // check command number
+        String method1 = valueInputs[0];
+        for (int i = 1; i <= 5; i++) {
+            if (method1.equalsIgnoreCase(String.valueOf(i))) {
+                valid = true;
+            } else {
+                valid = false;
+            }
+        }
+
+        // check argument
+        if (valueInputs.length > 1) {
+            String method2 = valueInputs[1];
+            if (method1.equalsIgnoreCase("1")) {
+                if (coins10 <= 0) {
+                    if (method2.equalsIgnoreCase("50")
+                            || method2.equalsIgnoreCase("100")
+                            || method2.equalsIgnoreCase("500")) {
+                        valid = false;
+                    }
+                } else if (coins100 <= 0) {
+                    if (method2.equalsIgnoreCase("500")) {
+                        valid = false;
+                    }
+                } else {
+                    if (method2.equalsIgnoreCase("10")
+                            || method2.equalsIgnoreCase("50")
+                            || method2.equalsIgnoreCase("100")
+                            || method2.equalsIgnoreCase("500")) {
+                        valid = true;
+                    }
+                }
+            } else if (method1.equalsIgnoreCase("2")) {
+                if (method2.equalsIgnoreCase("1")
+                        || method2.equalsIgnoreCase("2")
+                        || method2.equalsIgnoreCase("3")) {
+                    valid = true;
+                } else {
+                    valid = false;
+                }
+            }
+        }
+        return valid;
+    }
+
+    private static void CaseOne(String method2) {
+        String returnGate = "empty";
+        String change100 = "No change";
+        String change10 = "Change";
+        String status1 = " ";
+        String status2 = " ";
+        String status3 = " ";
+        String outlet = "empty";
+        int cannedCoffee = 3; // stock canned coffe
+        int waterPetBottle = 0; // stock water pet bottle
+        int sportDrinks = 5; // stock sport drinks
+
+        // check available item to purchase
+        int coins = Integer.parseInt(method2);
+        // canned coffe
+        if (cannedCoffee > 0) {
+            if (coins < 120) {
+                status1 = " ";
+            } else {
+                status1 = "Available for purchase";
+            }
+        } else {
+            if (coins < 120 || coins >= 120) {
+                status1 = "Sold out";
+            }
+        }
+        // water pet bottle
+        if (waterPetBottle > 0) {
+            if (coins < 100) {
+                status2 = " ";
+            } else {
+                status2 = "Available for purchase";
+            }
+        } else {
+            if (coins < 100 || coins >= 100) {
+                status2 = "Sold out";
+            }
+        }
+        // sport drinks
+        if (sportDrinks > 0) {
+            if (coins < 150) {
+                status3 = " ";
+            } else {
+                status3 = "Available for purchase";
+            }
+        } else {
+            if (coins < 150 || coins >= 150) {
+                status3 = "Sold out";
+            }
+        }
+
+        System.out.println("----------------------------------");
+        System.out.printf("[Input amount]		%s JPY\n", method2);
+        System.out.printf("[Change]                100 JPY     %s\n", change100);
+        System.out.printf("                        10 JPY      %s\n", change10);
+        System.out.printf("[Return gate]           %s\n", returnGate);
+        System.out.printf("[Items for sale]        1. Canned coffee         120 JPY     %s\n", status1);
+        System.out.printf("                        2. Water PET bottle      100 JPY     %s\n", status2);
+        System.out.printf("                        3. Sport drinks          150 JPY     %s\n", status3);
+        System.out.printf("[Outlet]                %s\n", outlet);
+        System.out.println("----------------------------------");
+    }
 }
