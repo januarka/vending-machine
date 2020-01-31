@@ -5,6 +5,7 @@
  */
 package vending.machine;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -19,49 +20,33 @@ public class VendingMachine {
     static int coins100 = 4;
     static int tempCoins = 0;
     static int coins;
+    static String returnGate = "empty";
+    static String change100 = "No change";
+    static String change10 = "Change";
+    static String status1 = " ";
+    static String status2 = " ";
+    static String status3 = " ";
+    static ArrayList<String> outlet = new ArrayList<>();
+    static int cannedCoffee = 3; // stock canned coffe
+    static int waterPetBottle = 0; // stock water pet bottle
+    static int sportDrinks = 5; // stock sport drinks
 
     public static void main(String[] args) {
 
         // Introduction input method
-        System.out.println("Command (1)\n"
-                + "	Command name     : Insert coins\n"
-                + "	Command number   : 1\n"
-                + "	Argument         : int, coin types (any of 10, 50, 100, 500)\n"
-                + "For example: “1 500” (Insert 500 JPY coin)\n"
-                + "\n"
-                + "Command (2)\n"
-                + "	Command name     : Choose item to purchase\n"
-                + "	Command number   : 2\n"
-                + "	Argument         : int, item types (any of item numbers)\n"
-                + "For example: “2 1” (1: Choose Canned coffee)\n"
-                + "\n"
-                + "Command (3)\n"
-                + "	Command name     : Get items\n"
-                + "	Command number   : 3\n"
-                + "	Argument         : None\n"
-                + "For example: “3” (Get items)\n"
-                + "\n"
-                + "Command (4)\n"
-                + "	Command name     : Return coins\n"
-                + "	Command number   : 4\n"
-                + "	Argument         : None\n"
-                + "For example: “4” (Pull Return lever)\n"
-                + "\n"
-                + "Command (5)\n"
-                + "	Command name     : Get returned coins\n"
-                + "	Command number   : 5\n"
-                + "	Argument         : None\n"
-                + "For example: “5” (Get returned coins)\n");
-
+        VendingMachine.outlet.add("empty");
         System.out.println("----------------------------------");
-        System.out.println("[Input amount]		0 JPY\n");
-        System.out.println("[Change]                100 JPY     No change");
-        System.out.println("                        10 JPY      Change");
-        System.out.println("[Return gate]           empty");
-        System.out.println("[Items for sale]        1. Canned coffee         120 JPY     ");
-        System.out.println("                        2. Water PET bottle      100 JPY     Sold out");
-        System.out.println("                        3. Sport drinks          150 JPY     ");
-        System.out.println("[Outlet]                empty");
+        System.out.printf("[Input amount]		%s JPY\n", VendingMachine.tempCoins);
+        System.out.printf("[Change]                100 JPY     %s\n", VendingMachine.change100);
+        System.out.printf("                        10 JPY      %s\n", VendingMachine.change10);
+        System.out.printf("[Return gate]           %s\n", VendingMachine.returnGate);
+        System.out.printf("[Items for sale]        1. Canned coffee         120 JPY     %s\n", VendingMachine.status1);
+        System.out.printf("                        2. Water PET bottle      100 JPY     %s\n", VendingMachine.status2);
+        System.out.printf("                        3. Sport drinks          150 JPY     %s\n", VendingMachine.status3);
+        System.out.print("[Outlet]");
+        for (String part : VendingMachine.outlet) {
+            System.out.println("                " + part);
+        }
         System.out.println("----------------------------------");
 
         while (true) {
@@ -72,7 +57,6 @@ public class VendingMachine {
 
             // split method input value from user
             SplitValue(method);
-
         }
     }
 
@@ -94,6 +78,7 @@ public class VendingMachine {
                     CaseOne(method2);
                     break;
                 case "2":
+                    CaseTwo(method2);
                     break;
                 case "3":
                     break;
@@ -158,68 +143,170 @@ public class VendingMachine {
         return valid;
     }
 
-    private static void CaseOne(String method2) {
-        String returnGate = "empty";
-        String change100 = "No change";
-        String change10 = "Change";
-        String status1 = " ";
-        String status2 = " ";
-        String status3 = " ";
-        String outlet = "empty";
-        int cannedCoffee = 3; // stock canned coffe
-        int waterPetBottle = 0; // stock water pet bottle
-        int sportDrinks = 5; // stock sport drinks
-
-        // check available item to purchase
-        coins = Integer.parseInt(method2);
-        VendingMachine.tempCoins = tempCoins + coins;
-        int allCoins = tempCoins;
+    private static void AvailableItem(int tempCoins) {
         // canned coffe
         if (cannedCoffee > 0) {
-            if (allCoins < 120) {
-                status1 = " ";
+            if (tempCoins < 120) {
+                VendingMachine.status1 = " ";
             } else {
-                status1 = "Available for purchase";
+                VendingMachine.status1 = "Available for purchase";
             }
         } else {
-            if (allCoins < 120 || allCoins >= 120) {
-                status1 = "Sold out";
+            if (tempCoins < 120 || tempCoins >= 120) {
+                VendingMachine.status1 = "Sold out";
             }
         }
         // water pet bottle
         if (waterPetBottle > 0) {
-            if (allCoins < 100) {
-                status2 = " ";
+            if (tempCoins < 100) {
+                VendingMachine.status2 = " ";
             } else {
-                status2 = "Available for purchase";
+                VendingMachine.status2 = "Available for purchase";
             }
         } else {
-            if (allCoins < 100 || allCoins >= 100) {
-                status2 = "Sold out";
+            if (tempCoins < 100 || tempCoins >= 100) {
+                VendingMachine.status2 = "Sold out";
             }
         }
         // sport drinks
         if (sportDrinks > 0) {
-            if (allCoins < 150) {
-                status3 = " ";
+            if (tempCoins < 150) {
+                VendingMachine.status3 = " ";
             } else {
-                status3 = "Available for purchase";
+                VendingMachine.status3 = "Available for purchase";
             }
         } else {
-            if (allCoins < 150 || allCoins >= 150) {
-                status3 = "Sold out";
+            if (tempCoins < 150 || tempCoins >= 150) {
+                VendingMachine.status3 = "Sold out";
             }
         }
+    }
+
+    private static void CaseOne(String method2) {
+        // check available item to purchase
+        VendingMachine.coins = Integer.parseInt(method2);
+        VendingMachine.tempCoins = VendingMachine.tempCoins + VendingMachine.coins;
+
+        // check available item
+        AvailableItem(VendingMachine.tempCoins);
 
         System.out.println("----------------------------------");
-        System.out.printf("[Input amount]		%s JPY\n", allCoins);
-        System.out.printf("[Change]                100 JPY     %s\n", change100);
-        System.out.printf("                        10 JPY      %s\n", change10);
-        System.out.printf("[Return gate]           %s\n", returnGate);
-        System.out.printf("[Items for sale]        1. Canned coffee         120 JPY     %s\n", status1);
-        System.out.printf("                        2. Water PET bottle      100 JPY     %s\n", status2);
-        System.out.printf("                        3. Sport drinks          150 JPY     %s\n", status3);
-        System.out.printf("[Outlet]                %s\n", outlet);
+        System.out.printf("[Input amount]		%s JPY\n", VendingMachine.tempCoins);
+        System.out.printf("[Change]                100 JPY     %s\n", VendingMachine.change100);
+        System.out.printf("                        10 JPY      %s\n", VendingMachine.change10);
+        System.out.printf("[Return gate]           %s\n", VendingMachine.returnGate);
+        System.out.printf("[Items for sale]        1. Canned coffee         120 JPY     %s\n", VendingMachine.status1);
+        System.out.printf("                        2. Water PET bottle      100 JPY     %s\n", VendingMachine.status2);
+        System.out.printf("                        3. Sport drinks          150 JPY     %s\n", VendingMachine.status3);
+        if (VendingMachine.outlet.size() < 2) {
+            System.out.println("[Outlet]                 empty");
+        } else {
+            System.out.print("[Outlet]");
+            for (int i = 1; i < VendingMachine.outlet.size(); i++) {
+                System.out.println("                " + VendingMachine.outlet.get(i));
+            }
+        }
+        System.out.println("----------------------------------");
+    }
+
+    private static void CaseTwo(String method2) {
+        String itemSelected = method2;
+        // select canned coffee
+        if (itemSelected.equals("1")) {
+            if (VendingMachine.status1.equalsIgnoreCase("Available for purchase")) {
+                if (VendingMachine.tempCoins < 120) {
+                    System.out.println("Input Method");
+                    System.out.println("Input [command number + space + arguments] into prompt");
+                    System.out.print("Your input: ");
+                    method = input.nextLine();
+                    // split method input value from user
+                    SplitValue(method);
+                    return;
+                } else {
+                    VendingMachine.tempCoins = VendingMachine.tempCoins - 120;
+                    VendingMachine.cannedCoffee = VendingMachine.cannedCoffee - 1;
+                    VendingMachine.outlet.add("Canned coffee");
+                    // check available item
+                    AvailableItem(VendingMachine.tempCoins);
+                }
+            } else {
+                System.out.println("Input Method");
+                System.out.println("Input [command number + space + arguments] into prompt");
+                System.out.print("Your input: ");
+                method = input.nextLine();
+                // split method input value from user
+                SplitValue(method);
+                return;
+            }
+        } else if (itemSelected.equals("2")) {
+            if (VendingMachine.status2.equalsIgnoreCase("Available for purchase")) {
+                if (VendingMachine.tempCoins < 100) {
+                    System.out.println("Input Method");
+                    System.out.println("Input [command number + space + arguments] into prompt");
+                    System.out.print("Your input: ");
+                    method = input.nextLine();
+                    // split method input value from user
+                    SplitValue(method);
+                    return;
+                } else {
+                    VendingMachine.tempCoins = VendingMachine.tempCoins - 100;
+                    VendingMachine.waterPetBottle = VendingMachine.waterPetBottle - 1;
+                    VendingMachine.outlet.add("Water PET bottle");
+                    // check available item
+                    AvailableItem(VendingMachine.tempCoins);
+                }
+            } else {
+                System.out.println("Input Method");
+                System.out.println("Input [command number + space + arguments] into prompt");
+                System.out.print("Your input: ");
+                method = input.nextLine();
+                // split method input value from user
+                SplitValue(method);
+                return;
+            }
+        } else if (itemSelected.equals("3")) {
+            if (VendingMachine.status3.equalsIgnoreCase("Available for purchase")) {
+                if (VendingMachine.tempCoins < 150) {
+                    System.out.println("Input Method");
+                    System.out.println("Input [command number + space + arguments] into prompt");
+                    System.out.print("Your input: ");
+                    method = input.nextLine();
+                    // split method input value from user
+                    SplitValue(method);
+                    return;
+                } else {
+                    VendingMachine.tempCoins = VendingMachine.tempCoins - 150;
+                    VendingMachine.sportDrinks = VendingMachine.sportDrinks - 1;
+                    VendingMachine.outlet.add("Sport drinks");
+                    // check available item
+                    AvailableItem(VendingMachine.tempCoins);
+                }
+            } else {
+                System.out.println("Input Method");
+                System.out.println("Input [command number + space + arguments] into prompt");
+                System.out.print("Your input: ");
+                method = input.nextLine();
+                // split method input value from user
+                SplitValue(method);
+                return;
+            }
+        }
+        System.out.println("----------------------------------");
+        System.out.printf("[Input amount]		%s JPY\n", VendingMachine.tempCoins);
+        System.out.printf("[Change]                100 JPY     %s\n", VendingMachine.change100);
+        System.out.printf("                        10 JPY      %s\n", VendingMachine.change10);
+        System.out.printf("[Return gate]           %s\n", VendingMachine.returnGate);
+        System.out.printf("[Items for sale]        1. Canned coffee         120 JPY     %s\n", VendingMachine.status1);
+        System.out.printf("                        2. Water PET bottle      100 JPY     %s\n", VendingMachine.status2);
+        System.out.printf("                        3. Sport drinks          150 JPY     %s\n", VendingMachine.status3);
+        if (VendingMachine.outlet.size() < 2) {
+            System.out.println("[Outlet]                 empty");
+        } else {
+            System.out.print("[Outlet]");
+            for (int i = 1; i < VendingMachine.outlet.size(); i++) {
+                System.out.println("                " + VendingMachine.outlet.get(i));
+            }
+        }
         System.out.println("----------------------------------");
     }
 }
