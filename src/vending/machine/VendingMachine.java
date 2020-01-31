@@ -17,6 +17,8 @@ public class VendingMachine {
     static String method = "";
     static int coins10 = 9;
     static int coins100 = 4;
+    static int tempCoins = 0;
+    static int coins;
 
     public static void main(String[] args) {
 
@@ -169,46 +171,48 @@ public class VendingMachine {
         int sportDrinks = 5; // stock sport drinks
 
         // check available item to purchase
-        int coins = Integer.parseInt(method2);
+        coins = Integer.parseInt(method2);
+        VendingMachine.tempCoins = tempCoins + coins;
+        int allCoins = tempCoins;
         // canned coffe
         if (cannedCoffee > 0) {
-            if (coins < 120) {
+            if (allCoins < 120) {
                 status1 = " ";
             } else {
                 status1 = "Available for purchase";
             }
         } else {
-            if (coins < 120 || coins >= 120) {
+            if (allCoins < 120 || allCoins >= 120) {
                 status1 = "Sold out";
             }
         }
         // water pet bottle
         if (waterPetBottle > 0) {
-            if (coins < 100) {
+            if (allCoins < 100) {
                 status2 = " ";
             } else {
                 status2 = "Available for purchase";
             }
         } else {
-            if (coins < 100 || coins >= 100) {
+            if (allCoins < 100 || allCoins >= 100) {
                 status2 = "Sold out";
             }
         }
         // sport drinks
         if (sportDrinks > 0) {
-            if (coins < 150) {
+            if (allCoins < 150) {
                 status3 = " ";
             } else {
                 status3 = "Available for purchase";
             }
         } else {
-            if (coins < 150 || coins >= 150) {
+            if (allCoins < 150 || allCoins >= 150) {
                 status3 = "Sold out";
             }
         }
 
         System.out.println("----------------------------------");
-        System.out.printf("[Input amount]		%s JPY\n", method2);
+        System.out.printf("[Input amount]		%s JPY\n", allCoins);
         System.out.printf("[Change]                100 JPY     %s\n", change100);
         System.out.printf("                        10 JPY      %s\n", change10);
         System.out.printf("[Return gate]           %s\n", returnGate);
