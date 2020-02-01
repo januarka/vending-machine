@@ -91,9 +91,10 @@ public class VendingMachine {
                     ReturnGate();
                     break;
                 case "5":
+                    GetReturnCoins();
                     break;
                 default:
-                    System.out.println("OK");
+                    System.out.println("OK\n");
             }
         }
         return value;
@@ -197,8 +198,8 @@ public class VendingMachine {
     }
 
     private static void InsertCoins(String method2) {
-        
-        if(VendingMachine.change == true){
+
+        if (VendingMachine.change == true) {
             System.out.println("OK\n");
             return;
         }
@@ -323,7 +324,7 @@ public class VendingMachine {
             System.out.println("OK\n");
             return;
         }
-        
+
         // delete existing item
         if (VendingMachine.outlet.size() > 1) {
             for (int i = 1; i <= VendingMachine.outlet.size(); i++) {
@@ -353,7 +354,10 @@ public class VendingMachine {
     }
 
     private static void ReturnGate() {
-        if(VendingMachine.change == true){
+        if (VendingMachine.tempCoins == 0) {
+            System.out.println("OK\n");
+            return;
+        } else if (VendingMachine.change == true) {
             System.out.println("OK\n");
             return;
         }
@@ -364,7 +368,7 @@ public class VendingMachine {
 
             // initialize temp coins after return gate
             VendingMachine.tempCoins = 0;
-            
+
             // initialize change 100 and 10
             VendingMachine.change100 = "No change";
             VendingMachine.change10 = "No change";
@@ -410,21 +414,21 @@ public class VendingMachine {
             } else {
                 VendingMachine.returnGate = "empty";
             }
-            
+
             // check change coins 100
-            if (VendingMachine.tempReturn100 > 0){
+            if (VendingMachine.tempReturn100 > 0) {
                 VendingMachine.change100 = "Change";
-            } else{
+            } else {
                 VendingMachine.change100 = "No change";
             }
-            
+
             // check change coins 10
-            if (VendingMachine.tempReturn10 > 0){
+            if (VendingMachine.tempReturn10 > 0) {
                 VendingMachine.change10 = "Change";
-            } else{
+            } else {
                 VendingMachine.change10 = "No change";
             }
-                
+
             // check status item
             AvailableItem(VendingMachine.tempCoins);
 
@@ -467,5 +471,34 @@ public class VendingMachine {
             System.out.println("----------------------------------");
             VendingMachine.change = true;
         }
+    }
+
+    private static void GetReturnCoins() {
+        if (VendingMachine.tempCoins == 0 && VendingMachine.change == false) {
+            System.out.println("masuk1");
+            System.out.println("OK\n");
+            return;
+        } else if (VendingMachine.tempCoins != 0 && VendingMachine.change == false) {
+            System.out.println("masuk2");
+            System.out.println("OK\n");
+            return;
+        }
+        //change status to Change, because back to initial state
+        VendingMachine.change10 = "Change";
+
+        System.out.println("----------------------------------");
+        System.out.printf("[Input amount]		%s JPY\n", VendingMachine.tempCoins);
+        System.out.printf("[Change]                100 JPY     %s\n", VendingMachine.change100);
+        System.out.printf("                        10 JPY      %s\n", VendingMachine.change10);
+        System.out.printf("[Return gate]           %s\n", VendingMachine.returnGate);
+        System.out.printf("[Items for sale]        1. Canned coffee         120 JPY     %s\n", VendingMachine.status1);
+        System.out.printf("                        2. Water PET bottle      100 JPY     %s\n", VendingMachine.status2);
+        System.out.printf("                        3. Sport drinks          150 JPY     %s\n", VendingMachine.status3);
+        System.out.print("[Outlet]");
+        for (String part : VendingMachine.outlet) {
+            System.out.println("                " + part);
+        }
+        System.out.println("----------------------------------");
+        VendingMachine.change = false;
     }
 }
