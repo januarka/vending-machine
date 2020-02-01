@@ -18,6 +18,8 @@ public class VendingMachine {
     static String method = "";
     static int coins10 = 9;
     static int coins100 = 4;
+    static int tempReturn100 = 0;
+    static int tempReturn10 = 0;
     static int tempCoins = 0;
     static int coins;
     static String returnGate = "empty";
@@ -30,6 +32,8 @@ public class VendingMachine {
     static int cannedCoffee = 3; // stock canned coffe
     static int waterPetBottle = 0; // stock water pet bottle
     static int sportDrinks = 5; // stock sport drinks
+    static boolean buy = false;
+    static boolean change = false;
 
     public static void main(String[] args) {
 
@@ -84,6 +88,7 @@ public class VendingMachine {
                     GetItems();
                     break;
                 case "4":
+                    ReturnGate();
                     break;
                 case "5":
                     break;
@@ -192,6 +197,11 @@ public class VendingMachine {
     }
 
     private static void InsertCoins(String method2) {
+        
+        if(VendingMachine.change == true){
+            System.out.println("OK\n");
+            return;
+        }
         // check available item to purchase
         VendingMachine.coins = Integer.parseInt(method2);
         VendingMachine.tempCoins = VendingMachine.tempCoins + VendingMachine.coins;
@@ -208,7 +218,7 @@ public class VendingMachine {
         System.out.printf("                        2. Water PET bottle      100 JPY     %s\n", VendingMachine.status2);
         System.out.printf("                        3. Sport drinks          150 JPY     %s\n", VendingMachine.status3);
         if (VendingMachine.outlet.size() < 2) {
-            System.out.println("[Outlet]                 empty");
+            System.out.println("[Outlet]                empty");
         } else {
             System.out.print("[Outlet]");
             for (int i = 1; i < VendingMachine.outlet.size(); i++) {
@@ -235,6 +245,7 @@ public class VendingMachine {
                     VendingMachine.tempCoins = VendingMachine.tempCoins - 120;
                     VendingMachine.cannedCoffee = VendingMachine.cannedCoffee - 1;
                     VendingMachine.outlet.add("Canned coffee");
+                    VendingMachine.buy = true;
                     // check available item
                     AvailableItem(VendingMachine.tempCoins);
                 }
@@ -256,6 +267,7 @@ public class VendingMachine {
                     VendingMachine.tempCoins = VendingMachine.tempCoins - 100;
                     VendingMachine.waterPetBottle = VendingMachine.waterPetBottle - 1;
                     VendingMachine.outlet.add("Water PET bottle");
+                    VendingMachine.buy = true;
                     // check available item
                     AvailableItem(VendingMachine.tempCoins);
                 }
@@ -277,6 +289,7 @@ public class VendingMachine {
                     VendingMachine.tempCoins = VendingMachine.tempCoins - 150;
                     VendingMachine.sportDrinks = VendingMachine.sportDrinks - 1;
                     VendingMachine.outlet.add("Sport drinks");
+                    VendingMachine.buy = true;
                     // check available item
                     AvailableItem(VendingMachine.tempCoins);
                 }
@@ -305,16 +318,21 @@ public class VendingMachine {
     }
 
     private static void GetItems() {
+
+        if (VendingMachine.outlet.size() < 2) {
+            System.out.println("OK\n");
+            return;
+        }
         
         // delete existing item
-        if (VendingMachine.outlet.size() > 1){
+        if (VendingMachine.outlet.size() > 1) {
             for (int i = 1; i <= VendingMachine.outlet.size(); i++) {
                 VendingMachine.outlet.remove(i);
             }
         } else {
-            
+
         }
-        
+
         System.out.println("----------------------------------");
         System.out.printf("[Input amount]		%s JPY\n", VendingMachine.tempCoins);
         System.out.printf("[Change]                100 JPY     %s\n", VendingMachine.change100);
@@ -324,7 +342,7 @@ public class VendingMachine {
         System.out.printf("                        2. Water PET bottle      100 JPY     %s\n", VendingMachine.status2);
         System.out.printf("                        3. Sport drinks          150 JPY     %s\n", VendingMachine.status3);
         if (VendingMachine.outlet.size() < 2) {
-            System.out.println("[Outlet]                 empty");
+            System.out.println("[Outlet]                empty");
         } else {
             System.out.print("[Outlet]");
             for (int i = 1; i < VendingMachine.outlet.size(); i++) {
@@ -332,5 +350,122 @@ public class VendingMachine {
             }
         }
         System.out.println("----------------------------------");
+    }
+
+    private static void ReturnGate() {
+        if(VendingMachine.change == true){
+            System.out.println("OK\n");
+            return;
+        }
+        // if no item has been purchased
+        if (VendingMachine.outlet.size() < 2 && VendingMachine.buy == false) {
+            // initialize temp return gate
+            int returnGate = VendingMachine.tempCoins;
+
+            // initialize temp coins after return gate
+            VendingMachine.tempCoins = 0;
+            
+            // initialize change 100 and 10
+            VendingMachine.change100 = "No change";
+            VendingMachine.change10 = "No change";
+
+            // check status item
+            AvailableItem(VendingMachine.tempCoins);
+
+            System.out.println("----------------------------------");
+            System.out.printf("[Input amount]		%s JPY\n", VendingMachine.tempCoins);
+            System.out.printf("[Change]                100 JPY     %s\n", VendingMachine.change100);
+            System.out.printf("                        10 JPY      %s\n", VendingMachine.change10);
+            System.out.printf("[Return gate]           %s JPY\n", returnGate);
+            System.out.printf("[Items for sale]        1. Canned coffee         120 JPY     %s\n", VendingMachine.status1);
+            System.out.printf("                        2. Water PET bottle      100 JPY     %s\n", VendingMachine.status2);
+            System.out.printf("                        3. Sport drinks          150 JPY     %s\n", VendingMachine.status3);
+            if (VendingMachine.outlet.size() < 2) {
+                System.out.println("[Outlet]                empty");
+            } else {
+                System.out.print("[Outlet]");
+                for (int i = 1; i < VendingMachine.outlet.size(); i++) {
+                    System.out.println("                " + VendingMachine.outlet.get(i));
+                }
+            }
+            System.out.println("----------------------------------");
+            VendingMachine.change = true;
+        } else {
+            // initialize modulus temp coins with 100
+            int a = VendingMachine.tempCoins % 100;
+            VendingMachine.tempReturn100 = VendingMachine.tempCoins / 100;
+            // initialize modulus a with 10
+            int b = a % 10;
+            VendingMachine.tempReturn10 = a / 10;
+            if (VendingMachine.tempCoins > 0) {
+                if (a != 0) {
+                    VendingMachine.tempReturn100 = VendingMachine.tempCoins / 100;
+                    if (b == 0) {
+                        VendingMachine.tempReturn10 = a / 10;
+                    }
+                } else {
+                    VendingMachine.tempReturn100 = VendingMachine.tempCoins / 100;
+                }
+                VendingMachine.tempCoins = 0;
+            } else {
+                VendingMachine.returnGate = "empty";
+            }
+            
+            // check change coins 100
+            if (VendingMachine.tempReturn100 > 0){
+                VendingMachine.change100 = "Change";
+            } else{
+                VendingMachine.change100 = "No change";
+            }
+            
+            // check change coins 10
+            if (VendingMachine.tempReturn10 > 0){
+                VendingMachine.change10 = "Change";
+            } else{
+                VendingMachine.change10 = "No change";
+            }
+                
+            // check status item
+            AvailableItem(VendingMachine.tempCoins);
+
+            System.out.println("----------------------------------");
+            System.out.printf("[Input amount]		%s JPY\n", VendingMachine.tempCoins);
+            System.out.printf("[Change]                100 JPY     %s\n", VendingMachine.change100);
+            System.out.printf("                        10 JPY      %s\n", VendingMachine.change10);
+            System.out.print("[Return gate]");
+            if (VendingMachine.tempReturn100 > 0) {
+                for (int i = 0; i < VendingMachine.tempReturn100; i++) {
+                    if (i == 0) {
+                        System.out.println("           100 JPY");
+                    } else {
+                        System.out.println("                        100 JPY");
+                    }
+                    VendingMachine.coins100--;
+                }
+            }
+            if (VendingMachine.tempReturn10 > 0) {
+                for (int i = 0; i < VendingMachine.tempReturn10; i++) {
+                    if (i == 0 && VendingMachine.tempReturn100 < 1) {
+                        System.out.println("           10 JPY");
+                    } else {
+                        System.out.println("                        10 JPY");
+                    }
+                    VendingMachine.coins10--;
+                }
+            }
+            System.out.printf("[Items for sale]        1. Canned coffee         120 JPY     %s\n", VendingMachine.status1);
+            System.out.printf("                        2. Water PET bottle      100 JPY     %s\n", VendingMachine.status2);
+            System.out.printf("                        3. Sport drinks          150 JPY     %s\n", VendingMachine.status3);
+            if (VendingMachine.outlet.size() < 2) {
+                System.out.println("[Outlet]                empty");
+            } else {
+                System.out.print("[Outlet]");
+                for (int i = 1; i < VendingMachine.outlet.size(); i++) {
+                    System.out.println("                " + VendingMachine.outlet.get(i));
+                }
+            }
+            System.out.println("----------------------------------");
+            VendingMachine.change = true;
+        }
     }
 }
